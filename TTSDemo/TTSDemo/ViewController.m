@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import <AVFoundation/AVFoundation.h>
+
 
 @interface ViewController ()
 
@@ -57,14 +57,21 @@
         utterance.rate = 0.1;
         utterance.volume = 1.0;
         AVSpeechSynthesizer *syntheSizer = [[AVSpeechSynthesizer alloc]init];
+        syntheSizer.delegate = self;
         [syntheSizer speakUtterance:utterance];
-        [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
     }
     else
     {
         UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入文字" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
         [alert show];
     }
+}
+
+#pragma mark- avSpeechSynthesizerDelegate
+
+-(void)speechSynthesizer:(AVSpeechSynthesizer *)synthesizer didFinishSpeechUtterance:(AVSpeechUtterance *)utterance
+{
+  [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
 }
 
 - (void)didReceiveMemoryWarning {
